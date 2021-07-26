@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "author": "Doublebyte",
-  "license": "CC", 
+  "license": "CC",
   "dependencies": {
     "bootstrap": "^5.0.2",
+    "leaflet": "^1.7.1",
     "react": "^16.10.1",
     "react-bootstrap": "^1.6.1",
     "react-dom": "^16.10.1",
