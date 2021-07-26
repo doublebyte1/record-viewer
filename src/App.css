@@ -1,0 +1,47 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+button {
+    width: auto;
+    margin: 1rem;
+    padding: 7px 10px;
+    font-size: 13px;
+    border-style: none;
+    border-radius: 3px;
+    background-color: #243d41;
+    color: #deeaec;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .button-normal {
+    width: auto;
+    margin: 1rem;
+    padding: 7px 10px;
+    font-size: 13px;
+    border-style: none;
+    border-radius: 3px;
+    background-color: #243d41;
+    color: #deeaec;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .button-clicked {
+    width: auto;
+    margin: 1rem;
+    padding: 7px 10px;
+    font-size: 13px;
+    border-style: none;
+    border-radius: 3px;
+    background-color: #9e2e34;
+    color: #deeaec;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  
+  
+  button:hover {
+    transform: scale(1.02);
+  }

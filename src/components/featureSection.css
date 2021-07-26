@@ -1,0 +1,26 @@
+#featured-section {
+    padding: 5rem;
+  }
+#feature-block {
+    margin: auto;
+    width: 60%;
+    height: fit-content;
+    display: flex;
+  }
+  #featured-section #feature-block img {
+    width: 40%;
+    border-radius: 3px;
+    border-style: none;
+  }
+  #right {
+    margin-left: 1rem;
+    padding: 2rem;
+  }
+  .leaflet-container {
+    width: 50%;
+    height: 50vh;
+  }
+
+
+
+
