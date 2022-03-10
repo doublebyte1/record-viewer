@@ -4,8 +4,8 @@ import "./userView.css";
 import "./featureSection.css";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 
-const baseUrl='http://ec2-3-65-14-187.eu-central-1.compute.amazonaws.com:5000';
-const collection="obs2";
+const baseUrl='https://emotional.byteroad.net';
+const collection="masked_rec";
 const limit=100;
 
 class UserView extends React.Component {
@@ -14,7 +14,9 @@ class UserView extends React.Component {
     this.state = {
       records: [],
       title: "",
-      address: "",
+      description: "",
+      contactPoint: "",
+      type: "",
       url: "",
       filter:"",
       markers: []
@@ -45,9 +47,11 @@ class UserView extends React.Component {
         // upon success, update tasks
         this.setState({ records: newRecords.features });
         this.setState({title: this.state.records[0].properties.title});
-        this.setState({address: this.state.records[0].properties.ADDRESS});
-        this.setState({url: this.state.records[0].properties.url});
-        this.setState({recordCreated: this.state.records[0].properties['record-created']});
+        this.setState({description: this.state.records[0].properties.description});
+        this.setState({url: this.getAvatar()});
+        this.setState({created: this.state.records[0].properties['created']});
+        this.setState({contactPoint: this.state.records[0].properties.contactPoint});
+        this.setState({type: this.state.records[0].properties.type});
         console.log(this.state.records);
       })
       .catch(error => {
@@ -74,7 +78,7 @@ class UserView extends React.Component {
   /* step 3 */
   handleClick(record) {
 
-    const latlng = {lat: record.properties.Lat, lng: record.properties.Long};
+    const latlng = {lat: record.geometry.coordinates[1], lng: record.geometry.coordinates[0]};
     console.log(latlng);
 
     const {markers} = this.state
@@ -85,11 +89,30 @@ class UserView extends React.Component {
 
     return this.setState({  
       title: record.properties.title,
-      address: record.properties.ADDRESS,
-      url: record.properties.url,
-      recordCreated: record.properties['record-created']
+      description: record.properties.description,
+      url: this.getAvatar(),
+      created: record.properties['created'],
+      contactPoint: record.properties['contactPoint'],
+      type: record.properties['type'],      
     }); 
 
+  }
+
+  getAvatar(){
+
+
+    const rnd=Math.random();
+    if (rnd < 0.2) {
+      return "https://upload.wikimedia.org/wikipedia/en/a/a7/StanMarsh.png";
+    } else if (rnd < 0.4) {
+      return "https://upload.wikimedia.org/wikipedia/en/7/77/EricCartman.png";
+    } else if (rnd < 0.6) {
+      return "https://upload.wikimedia.org/wikipedia/en/2/25/KyleBroflovski.png";
+    } else if (rnd < 0.8) {
+      return "https://upload.wikimedia.org/wikipedia/en/6/6f/KennyMcCormick.png";
+    } else {
+      return "https://upload.wikimedia.org/wikipedia/en/a/ab/Wendy_South_Park.png";
+    }
   }
 
   renderProjectItem() {
@@ -103,10 +126,12 @@ class UserView extends React.Component {
             this.handleClick(record);
           }}
         >
-          <img src={record.properties.url} alt={record.properties.title} />
+          <img src={this.getAvatar()} alt={record.properties.title} />
           <h3>{record.properties.title}</h3>
-          <p>{record.properties.ADDRESS}</p>
-          <p>record-created: {record.properties['record-created']}</p>
+          <p>description: {record.properties.description}</p>
+          <p>contactPoint: {record.properties.contactPoint}</p>
+          <p>created: {record.properties['created']}</p>
+          <p>type: {record.properties['type']}</p>
         </div>
       );
     });
@@ -126,7 +151,7 @@ class UserView extends React.Component {
 
             {/* <img id="feature-img" src={this.state.url} alt={this.state.title} /> */}
             
-            <Map ref='map' center={[41.38879, 2.15899]} zoom={15} onClick={this.addMarker}>
+            <Map ref='map' center={[38.736946, -9.142685]} zoom={11} onClick={this.addMarker}>
               <TileLayer
                 url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.png"
                 attribution='&copy; Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -146,7 +171,8 @@ class UserView extends React.Component {
             
             <div id="right">
               <h2 id="feature-title">{this.state.title}</h2>
-              <p id="feature-desc">{this.state.address}</p>
+              <p id="feature-desc">{this.state.description}</p>
+              <p id="feature-created">{this.state.created}</p>
             </div>
           </div>
         </div>
