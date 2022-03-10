@@ -18,7 +18,7 @@ class FeatureSection extends React.Component {
       <div className="featured-section">
         <div id="feature-block">
 
-        <Map ref='map' center={[41.38879, 2.15899]}
+        <Map ref='map' center={[38.736946, -9.142685]}
               zoom={15}
               >
                 <TileLayer
