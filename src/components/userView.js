@@ -2,10 +2,10 @@ import React from "react";
 import FeatureSection from "./featureSection";
 import "./userView.css";
 import "./featureSection.css";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import { Map, TileLayer, Polygon, Marker, Popup } from "react-leaflet";
 
 const baseUrl='https://emotional.byteroad.net';
-const collection="masked_rec";
+const collection="ec_catalog";
 const limit=100;
 
 class UserView extends React.Component {
@@ -52,7 +52,7 @@ class UserView extends React.Component {
         this.setState({created: this.state.records[0].properties['created']});
         this.setState({contactPoint: this.state.records[0].properties.contactPoint});
         this.setState({type: this.state.records[0].properties.type});
-        console.log(this.state.records);
+        //console.log(this.state.records);
       })
       .catch(error => {
         // upon failure, show error message
@@ -75,11 +75,21 @@ class UserView extends React.Component {
     this.getRecords(`${baseUrl}/collections/${collection}/items?limit=${limit}`);
   }
 
+  genDelta() {
+
+    return Math.random();
+  }
+
   /* step 3 */
   handleClick(record) {
 
+/*
     const latlng = {lat: record.geometry.coordinates[1], lng: record.geometry.coordinates[0]};
+*/
+    //console.log(record.properties.extent.spatial.bbox);
+    const latlng = {lat: record.properties.extent.spatial.bbox[0][1], lng: record.properties.extent.spatial.bbox[0][0]+ this.genDelta()};
     console.log(latlng);
+    //console.log(this.genDelta());
 
     const {markers} = this.state
     markers.push(latlng)
@@ -95,6 +105,10 @@ class UserView extends React.Component {
       contactPoint: record.properties['contactPoint'],
       type: record.properties['type'],      
     }); 
+
+
+
+
 
   }
 
@@ -121,7 +135,7 @@ class UserView extends React.Component {
     return this.state.records.map(record => {
       return (
         <div
-          className="project-item"  key={record.title}
+          className="project-item"  key={record.id}
           onClick={() => {
             this.handleClick(record);
           }}
@@ -129,7 +143,7 @@ class UserView extends React.Component {
           <img src={this.getAvatar()} alt={record.properties.title} />
           <h3>{record.properties.title}</h3>
           <p>description: {record.properties.description}</p>
-          <p>contactPoint: {record.properties.contactPoint}</p>
+          <p>contactPoint: {record.properties.contactPoint.name}</p>
           <p>created: {record.properties['created']}</p>
           <p>type: {record.properties['type']}</p>
         </div>

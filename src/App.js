@@ -13,12 +13,12 @@ class App extends React.Component {
 
 
   componentDidMount() {
-    fetch("https://emotional.byteroad.net/collections/masked/items?f=json")
+    fetch("https://emotional.byteroad.net/collections/ec_catalog/items?f=json")
       .then(res => res.json())
       .then(newRecords => {
         // upon success, update tasks
         this.setState({ records: newRecords });
-        console.log(newRecords);
+        //console.log(newRecords);
       })
       .catch(error => {
         // upon failure, show error message
