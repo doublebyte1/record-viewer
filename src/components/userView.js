@@ -2,18 +2,31 @@ import React from "react";
 //import FeatureSection from "./featureSection";
 import "./userView.css";
 import "./featureSection.css";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import { Map, MapContainer, TileLayer, Marker, Popup, Rectangle } from "react-leaflet";
 
 const baseUrl='https://emotional.byteroad.net';
 const collection="ec_catalog";
 const limit=100;
+const limeOptions = { color: 'lime' }
+const rectangle = [
+  [38.709803,-9.135388,
+  ],
+  [
+  38.717261,-9.128275]
+];
 
 class UserView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      map: null,
       mainTitle: "",
       mainDescription: "",
+      mainExtent: [
+        [51.49, -0.08],
+        [51.5, -0.06],
+      ],
+      center: [0,0],
       records: [],
       title: "",
       description: "",
@@ -24,7 +37,6 @@ class UserView extends React.Component {
       markers: []
     };
   }
-
 
   // Add a marker to the map, by clicking on it
   addMarker = (e) => {
@@ -43,14 +55,44 @@ class UserView extends React.Component {
   }
 
 
-  getTitle(url) {
+  drawExtent(coords){
+
+    var bounds = [[coords[1], coords[0]], [coords[3], coords[2] ]];
+    this.setState({ mainExtent: bounds});
+    this.setState({ center: [coords[1], coords[0]] });
+    console.log(this.state.center);
+   
+    // const map = useMap();
+    // map.fitBounds(bounds);
+
+    //this.setState({ center: rect.getBounds().getCenter()});
+    console.log(this.state.mainExtent);
+    console.log(rectangle);
+/*     const {map} = this.state;
+    if (map) {
+      map.fitBounds(bounds);
+    } else console.log("no map, yet"); */
+
+    //var bounds = [[54.559322, -5.767822], [56.1210604, -3.021240]];
+    //Rectangle(bounds, {color: "#ff7800", weight: 1}).addTo(mapInst);
+    // zoom the map to the rectangle bounds
+    //mapInst.fitBounds(bounds);
+
+    //console.log(rect.getBounds().getCenter());
+    //mapInst.flyTo(rect.getBounds().getCenter(), 12);
+
+  }
+
+  getCollectionMetadata(url) {
+
     fetch(url)
       .then(res => res.json())
       .then(metadata => {
         // upon success, update tasks
         this.setState({ mainTitle: metadata.title });
         this.setState({ mainDescription: metadata.description });
-        console.log(this.state.mainTitle);
+        //console.log(metadata.extent.spatial.bbox[0]);
+        this.drawExtent(metadata.extent.spatial.bbox[0]);
       })
       .catch(error => {
         // upon failure, show error message
@@ -67,7 +109,7 @@ class UserView extends React.Component {
         // upon success, update tasks
         this.setState({ records: newRecords.features });
         this.setState({title: this.state.records[0].properties.title});
-        this.setState({description: this.state.records[0].properties.description});
+        this.setState({description: this.state.records[0].propemainTitlerties.description});
         this.setState({url: this.getAvatar()});
         this.setState({created: this.state.records[0].properties['created']});
         this.setState({contactPoint: this.state.records[0].properties.contactPoint});
@@ -94,9 +136,8 @@ class UserView extends React.Component {
 
   componentDidMount() {
 
-    // read title
-    this.getTitle(`${baseUrl}/collections/${collection}?f=json`);
-
+    // read title, etc
+    this.getCollectionMetadata(`${baseUrl}/collections/${collection}?f=json`);
     this.getRecords(`${baseUrl}/collections/${collection}/items?limit=${limit}`);
   }
 
@@ -184,9 +225,9 @@ class UserView extends React.Component {
       <div> 
 
         <div className="card bg-dark text-white text-center">
-          <div class="card-body">
-            <h2 class="card-title">{this.state.mainTitle !== ""? this.state.mainTitle : "My Catalog"}</h2>
-            <p class="card-text">{this.state.mainDescription !== ""? this.state.mainDescription: "This is a placeholder for the catalog description."}</p>
+          <div className="card-body">
+            <h2 className="card-title">{this.state.mainTitle !== ""? this.state.mainTitle : "My Catalog"}</h2>
+            <p className="card-text">{this.state.mainDescription !== ""? this.state.mainDescription: "This is a placeholder for the catalog description."}</p>
           </div>
         </div>
 
@@ -194,14 +235,15 @@ class UserView extends React.Component {
 
           <div id="feature-block">
             
-            <Map ref='map' center={[38.736946, -9.142685]} zoom={11} onClick={this.addMarker}>
+            <Map ref='map' center={this.state.center} zoom={13} whenCreated={map => this.setState({ map })} onClick={this.addMarker}>
               <TileLayer
                 url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.png"
                 attribution='&copy; Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               />
+
+              <Rectangle bounds={this.state.mainExtent} pathOptions={limeOptions} />
           </Map>     
-            
-            
+                 
             <div id="right">
               <h2 id="feature-title">{this.state.title}</h2>
               <p id="feature-desc">{this.state.description}</p>
@@ -232,8 +274,8 @@ class UserView extends React.Component {
 
         <div id="project-grid">{this.renderProjectItem()}</div>
 
-        <footer class="page-footer font-small blue pt-4">
-          <div class="footer-copyright text-center py-3">Developed by ByteRoad:
+        <footer className="page-footer font-small blue pt-4">
+          <div className="footer-copyright text-center py-3">Developed by ByteRoad:
             <a href="/"> ByteRoad.net</a>
           </div>
         </footer>
