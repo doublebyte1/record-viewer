@@ -1,8 +1,8 @@
 import React from "react";
-import FeatureSection from "./featureSection";
+//import FeatureSection from "./featureSection";
 import "./userView.css";
 import "./featureSection.css";
-import { Map, TileLayer, Polygon, Marker, Popup } from "react-leaflet";
+import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 
 const baseUrl='https://emotional.byteroad.net';
 const collection="ec_catalog";
@@ -63,7 +63,7 @@ class UserView extends React.Component {
 
   handleSubmit() {
     
-      this.getRecords(this.state.filter != ''?
+      this.getRecords(this.state.filter !== ''?
         `${baseUrl}/collections/${collection}/items?q=${this.state.filter}`:
         `${baseUrl}/collections/${collection}/items?limit=${limit}`);
 
@@ -86,7 +86,7 @@ class UserView extends React.Component {
 /*
     const latlng = {lat: record.geometry.coordinates[1], lng: record.geometry.coordinates[0]};
 */
-    //console.log(record.properties.extent.spatial.bbox);
+    console.log(record);
     const latlng = {lat: record.properties.extent.spatial.bbox[0][1], lng: record.properties.extent.spatial.bbox[0][0]+ this.genDelta()};
     console.log(latlng);
     //console.log(this.genDelta());
