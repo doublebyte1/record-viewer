@@ -6,6 +6,7 @@
     width: 60%;
     height: fit-content;
     display: flex;
+    background: #9fa2a4;
   }
   #featured-section #feature-block img {
     width: 40%;

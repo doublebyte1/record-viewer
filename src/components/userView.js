@@ -12,6 +12,8 @@ class UserView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      mainTitle: "",
+      mainDescription: "",
       records: [],
       title: "",
       description: "",
@@ -40,6 +42,24 @@ class UserView extends React.Component {
     });
   }
 
+
+  getTitle(url) {
+    fetch(url)
+      .then(res => res.json())
+      .then(metadata => {
+        // upon success, update tasks
+        this.setState({ mainTitle: metadata.title });
+        this.setState({ mainDescription: metadata.description });
+        console.log(this.state.mainTitle);
+      })
+      .catch(error => {
+        // upon failure, show error message
+      });
+
+    
+  }
+
+
   getRecords(url) {
     fetch(url)
       .then(res => res.json())
@@ -63,6 +83,7 @@ class UserView extends React.Component {
 
   handleSubmit() {
     
+      // read records
       this.getRecords(this.state.filter !== ''?
         `${baseUrl}/collections/${collection}/items?q=${this.state.filter}`:
         `${baseUrl}/collections/${collection}/items?limit=${limit}`);
@@ -72,6 +93,10 @@ class UserView extends React.Component {
 
 
   componentDidMount() {
+
+    // read title
+    this.getTitle(`${baseUrl}/collections/${collection}?f=json`);
+
     this.getRecords(`${baseUrl}/collections/${collection}/items?limit=${limit}`);
   }
 
@@ -155,32 +180,26 @@ class UserView extends React.Component {
   render() {
     return (
 
+      
       <div> 
+
+        <div className="card bg-dark text-white text-center">
+          <div class="card-body">
+            <h2 class="card-title">{this.state.mainTitle}</h2>
+            <p class="card-text">{this.state.mainDescription}</p>
+          </div>
+        </div>
 
         <div className="featured-section">
 
-
-
           <div id="feature-block">
-
-            {/* <img id="feature-img" src={this.state.url} alt={this.state.title} /> */}
             
             <Map ref='map' center={[38.736946, -9.142685]} zoom={11} onClick={this.addMarker}>
               <TileLayer
                 url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.png"
                 attribution='&copy; Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               />
-              {this.state.markers.map((position, idx) => 
-              <Marker key={`marker-${idx}`} position={position}>
-                <Popup>
-                  <span>Hello world!</span>
-                </Popup>
-            </Marker>
-              )}
           </Map>     
-            
-            
-            
             
             
             <div id="right">
@@ -188,23 +207,26 @@ class UserView extends React.Component {
               <p id="feature-desc">{this.state.description}</p>
               <p id="feature-created">{this.state.created}</p>
             </div>
+
           </div>
+
+
+          <div className="project-search">
+          <div className="form-inline mb-3">
+
+            <input type="text" className="form-control flex-primary-1" placeholder="" aria-label="" aria-describedby="basic-addon1" name="title" onChange={e => this.handleInputChange(e)}/>
+            <div className="input-group-prepend">
+                <button className="btn btn-primary ml-2" type="button" onClick={(e) => this.handleSubmit(e)}>Filter</button>
+            </div>
+          </div>  
+        </div>
+
+          
         </div>
         
 
 
-        <div className="project-search">
 
-          <div className="form-inline mb-3">
-
-          <input type="text" className="form-control flex-primary-1" placeholder="" aria-label="" aria-describedby="basic-addon1" name="title" onChange={e => this.handleInputChange(e)}/>
-          <div className="input-group-prepend">
-              <button className="btn btn-primary ml-2" type="button" onClick={(e) => this.handleSubmit(e)}>Filter</button>
-          </div>
-
-          </div>
-          
-        </div>
 
 
 
