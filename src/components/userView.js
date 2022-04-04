@@ -9,10 +9,10 @@ const collection="ec_catalog";
 const limit=100;
 const limeOptions = { color: 'lime' }
 const rectangle = [
-  [38.709803,-9.135388,
+  [0,0,
   ],
   [
-  38.717261,-9.128275]
+  0,0]
 ];
 
 class UserView extends React.Component {
@@ -59,27 +59,13 @@ class UserView extends React.Component {
 
     var bounds = [[coords[1], coords[0]], [coords[3], coords[2] ]];
     this.setState({ mainExtent: bounds});
-    this.setState({ center: [coords[1], coords[0]] });
+    this.setState({ center: [(coords[1] + coords[3])/2.0, (coords[0] + coords[2]) / 2.0] });
+
     console.log(this.state.center);
    
-    // const map = useMap();
-    // map.fitBounds(bounds);
-
-    //this.setState({ center: rect.getBounds().getCenter()});
     console.log(this.state.mainExtent);
     console.log(rectangle);
-/*     const {map} = this.state;
-    if (map) {
-      map.fitBounds(bounds);
-    } else console.log("no map, yet"); */
 
-    //var bounds = [[54.559322, -5.767822], [56.1210604, -3.021240]];
-    //Rectangle(bounds, {color: "#ff7800", weight: 1}).addTo(mapInst);
-    // zoom the map to the rectangle bounds
-    //mapInst.fitBounds(bounds);
-
-    //console.log(rect.getBounds().getCenter());
-    //mapInst.flyTo(rect.getBounds().getCenter(), 12);
 
   }
 
@@ -235,7 +221,7 @@ class UserView extends React.Component {
 
           <div id="feature-block">
             
-            <Map ref='map' center={this.state.center} zoom={13} whenCreated={map => this.setState({ map })} onClick={this.addMarker}>
+            <Map ref='map' center={this.state.center} zoom={7} whenCreated={map => this.setState({ map })} onClick={this.addMarker}>
               <TileLayer
                 url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.png"
                 attribution='&copy; Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
