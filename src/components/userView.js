@@ -185,8 +185,8 @@ class UserView extends React.Component {
 
         <div className="card bg-dark text-white text-center">
           <div class="card-body">
-            <h2 class="card-title">{this.state.mainTitle}</h2>
-            <p class="card-text">{this.state.mainDescription}</p>
+            <h2 class="card-title">{this.state.mainTitle !== ""? this.state.mainTitle : "My Catalog"}</h2>
+            <p class="card-text">{this.state.mainDescription !== ""? this.state.mainDescription: "This is a placeholder for the catalog description."}</p>
           </div>
         </div>
 
