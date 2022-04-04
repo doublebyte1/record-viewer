@@ -9,18 +9,15 @@
     background: #9fa2a4;
   }
   #featured-section #feature-block img {
-    width: 40%;
-    border-radius: 3px;
+    /* width: 40%; */
+    border-radius: 0px;
     border-style: none;
   }
   #right {
     margin-left: 1rem;
     padding: 2rem;
   }
-  .leaflet-container {
-    width: 50%;
-    height: 50vh;
-  }
+ 
 
 
 
