@@ -2,12 +2,14 @@ import React from "react";
 //import FeatureSection from "./featureSection";
 import "./userView.css";
 import "./featureSection.css";
-import { Map, MapContainer, TileLayer, Marker, Popup, Rectangle } from "react-leaflet";
+import { Map, TileLayer, Rectangle } from "react-leaflet";
+import * as L from "leaflet";
 
 const baseUrl='https://emotional.byteroad.net';
 const collection="ec_catalog";
 const limit=100;
-const limeOptions = { color: 'lime' }
+const fillBlueOptions = { fillColor: 'blue' }
+const limeOptions = { color:  "#ff7800", weight: 1 }
 const rectangle = [
   [0,0,
   ],
@@ -55,16 +57,18 @@ class UserView extends React.Component {
   }
 
 
+
   drawExtent(coords){
 
     var bounds = [[coords[1], coords[0]], [coords[3], coords[2] ]];
-    this.setState({ mainExtent: bounds});
-    this.setState({ center: [(coords[1] + coords[3])/2.0, (coords[0] + coords[2]) / 2.0] });
+    const rect= L.rectangle(bounds, {color: "#ff7800", weight: 1})
 
-    console.log(this.state.center);
-   
-    console.log(this.state.mainExtent);
-    console.log(rectangle);
+    this.setState({ mainExtent: bounds});
+    this.setState({ center: rect.getBounds().getCenter() });
+
+
+    //console.log(this.state.center);
+  
 
 
   }
@@ -94,12 +98,12 @@ class UserView extends React.Component {
       .then(newRecords => {
         // upon success, update tasks
         this.setState({ records: newRecords.features });
-        this.setState({title: this.state.records[0].properties.title});
+/*         this.setState({title: this.state.records[0].properties.title});
         this.setState({description: this.state.records[0].propemainTitlerties.description});
         this.setState({url: this.getAvatar()});
         this.setState({created: this.state.records[0].properties['created']});
         this.setState({contactPoint: this.state.records[0].properties.contactPoint});
-        this.setState({type: this.state.records[0].properties.type});
+        this.setState({type: this.state.records[0].properties.type}); */
         //console.log(this.state.records);
       })
       .catch(error => {
