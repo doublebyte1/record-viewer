@@ -231,6 +231,15 @@ class UserView extends React.Component {
 
 
         <div id="project-grid">{this.renderProjectItem()}</div>
+
+        <footer class="page-footer font-small blue pt-4">
+          <div class="footer-copyright text-center py-3">Developed by ByteRoad:
+            <a href="/"> ByteRoad.net</a>
+          </div>
+        </footer>
+
+
+
       </div>
     );
   }
